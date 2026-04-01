@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+coverage
+
+*.js
+*.ts
+*.jsx
+*.tsx
+*.md
+*.json
+*.svg

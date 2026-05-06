@@ -1,6 +1,6 @@
-import { Box, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { generationsMock } from '@/entities/generation/model/mocks';
+import { Box, Typography } from '@mui/material';
+import { generationsMock } from '@/entities/generation';
 import type { Generation } from '@/entities/generation';
 import { GenerationList } from './GenerationList.tsx';
 import { Loader, ErrorMessage } from '@/shared/ui';

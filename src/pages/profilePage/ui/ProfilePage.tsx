@@ -1,7 +1,7 @@
 import { Box, Typography, Divider } from '@mui/material';
+import { userMock } from '@/entities/user';
 import { UserCard } from './UserCard';
 import { GenerationHistory } from './GenerationHistory';
-import { userMock } from '@/entities/user/model/mocks';
 
 export function ProfilePage() {
   return (

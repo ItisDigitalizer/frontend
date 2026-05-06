@@ -1,29 +1,8 @@
-import { useEffect } from 'react';
-import { Box, Paper, Typography, CircularProgress } from '@mui/material';
+import { Modal, Paper, Typography, CircularProgress } from '@mui/material';
 
 export function GenerateOverlay() {
-  useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
-
   return (
-    <Box
-      sx={{
-        position: 'fixed',
-        inset: 0,
-        bgcolor: 'rgba(0,0,0,0.6)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-      }}
-    >
+    <Modal open sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', p: 3 }}>
       <Paper
         sx={{
           width: '100%',
@@ -37,7 +16,7 @@ export function GenerateOverlay() {
           borderRadius: 2,
         }}
       >
-        <CircularProgress size={128}></CircularProgress>
+        <CircularProgress size={128} />
 
         <Typography component="h2" variant="h3">
           Генерация документа...
@@ -47,6 +26,6 @@ export function GenerateOverlay() {
           Пожалуйста, подождите
         </Typography>
       </Paper>
-    </Box>
+    </Modal>
   );
 }

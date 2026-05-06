@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
+import { templatesMock } from '@/entities/template';
 import type { Template } from '@/entities/template';
-import { templatesMock } from '@/entities/template/model/mocks';
 import { ErrorMessage, Loader } from '@/shared/ui';
 import { TemplatesSearch } from './TemplatesSearch';
 import { TemplatesList } from './TemplatesList';

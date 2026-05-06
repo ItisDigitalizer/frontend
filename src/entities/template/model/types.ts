@@ -6,10 +6,7 @@ export type Template = {
   description: string;
 };
 
-export type TemplateWithFields = {
-  id: number;
-  name: string;
-  description: string;
+export type TemplateWithFields = Template & {
   url: string;
   fields: TemplateField[];
 };

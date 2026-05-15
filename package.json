@@ -11,7 +11,8 @@
     "format": "prettier --write .",
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "openapi:generate": "openapi-ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -19,12 +20,14 @@
     "@fontsource/roboto": "^5.2.10",
     "@mui/icons-material": "^9.0.0",
     "@mui/material": "^9.0.0",
+    "axios": "^1.16.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.14.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@hey-api/openapi-ts": "^0.97.1",
     "@types/node": "^24.12.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

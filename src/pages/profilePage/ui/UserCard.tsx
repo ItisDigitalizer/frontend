@@ -1,6 +1,6 @@
 import { Paper, Typography, Box, Button } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import LogoutIcon from '@mui/icons-material/Logout';
+import { LogoutButton } from '@/features/auth/logout';
 import type { User } from '@/entities/user';
 
 type Props = {
@@ -32,18 +32,12 @@ export function UserCard({ user }: Props) {
         </Typography>
       </Box>
 
-      {/* TODO: реализовать действия */}
-      <Box sx={{ display: 'flex', gap: 2 }}>
-        <Button variant="contained" color="accent">
-          Редактировать
-        </Button>
-        <Button variant="outlined">Сменить пароль</Button>
-      </Box>
-
-      {/* TODO: вынести в features? */}
-      <Button variant="text" color="error" startIcon={<LogoutIcon />} sx={{ position: 'absolute', top: 12, right: 12 }}>
-        Выйти
+      {/* TODO: реализовать редактирование */}
+      <Button variant="contained" color="accent">
+        Редактировать
       </Button>
+
+      <LogoutButton />
     </Paper>
   );
 }

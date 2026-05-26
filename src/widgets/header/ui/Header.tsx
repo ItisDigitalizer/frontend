@@ -1,11 +1,11 @@
 import { Box, Container } from '@mui/material';
+import { useAuth } from '@/entities/auth';
 import { HeaderLogo } from './HeaderLogo';
 import { HeaderAuthActions } from './HeaderAuthActions';
 import { HeaderUserProfile } from './HeaderUserProfile';
 
 export function Header() {
-  // TODO: заменить на useAuth() после подключения авторизации
-  const isAuth = false;
+  const { isAuth } = useAuth();
 
   return (
     <Box component="header" sx={{ bgcolor: 'background.paper', px: 3 }}>

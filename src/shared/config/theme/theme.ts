@@ -136,6 +136,14 @@ export const theme = createTheme({
           '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: theme.palette.accent.main,
           },
+
+          '&.Mui-error .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.error.main,
+          },
+
+          '&.Mui-error.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.error.main,
+          },
         }),
       },
     },

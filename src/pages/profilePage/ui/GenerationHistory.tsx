@@ -12,7 +12,7 @@ export function GenerationHistory() {
 
   // TODO: заменить на API
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       try {
         setGenerations(generationsMock);
       } catch {
@@ -21,6 +21,8 @@ export function GenerationHistory() {
         setIsLoading(false);
       }
     }, 1000);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (

@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { MainLayout, AuthLayout } from '@/app/layouts';
+import { ProtectedRoute } from '@/app/router/ProtectedRoute';
 import { TemplatesPage } from '@/pages/templatesPage';
 import { LoginPage } from '@/pages/loginPage';
 import { RegisterPage } from '@/pages/registerPage';
@@ -9,8 +10,6 @@ import { ProfilePage } from '@/pages/profilePage';
 import { NotFoundPage } from '@/pages/notFoundPage';
 
 function App() {
-  const isAuth = false; //заглушка
-
   return (
     <Routes>
       <Route element={<MainLayout />}>
@@ -21,8 +20,9 @@ function App() {
         <Route
           path="/profile"
           element={
-            // TODO: сделать обертку для приватных роутов
-            isAuth ? <ProfilePage /> : <Navigate to="/login" replace />
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
           }
         />
       </Route>

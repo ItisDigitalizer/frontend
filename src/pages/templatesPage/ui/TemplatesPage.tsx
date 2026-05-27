@@ -13,7 +13,7 @@ export function TemplatesPage() {
 
   // TODO: заменить mock-данные на API запрос
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       try {
         setTemplates(templatesMock);
       } catch {
@@ -22,6 +22,8 @@ export function TemplatesPage() {
         setIsLoading(false);
       }
     }, 1000);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (

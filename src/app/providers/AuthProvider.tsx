@@ -29,9 +29,13 @@ export function AuthProvider({ children }: Props) {
 
   // TODO: заменить на реальный API запрос
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
     const initializeAuth = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => {
+          timeoutId = setTimeout(resolve, 1000);
+        });
       } catch {
         setAuth({
           user: null,
@@ -43,6 +47,8 @@ export function AuthProvider({ children }: Props) {
     };
 
     void initializeAuth();
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const authContextValue: AuthContextValue = {

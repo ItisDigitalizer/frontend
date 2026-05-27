@@ -35,7 +35,7 @@ export function GeneratePage() {
 
   // TODO: заменить mock-данные на API запрос по id
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       try {
         setTemplate(templateMock);
       } catch {
@@ -44,6 +44,8 @@ export function GeneratePage() {
         setIsLoading(false);
       }
     }, 1000);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   if (isLoading) {

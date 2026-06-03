@@ -1,20 +1,22 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Typography } from '@mui/material';
+import type { TypographyProps } from '@mui/material';
 
 type Props = {
   children: ReactNode;
   to?: string;
   onClick?: () => void;
+  variant?: TypographyProps['variant'];
 };
 
-export function LinkText({ children, to, onClick }: Props) {
+export function LinkText({ children, to, onClick, variant = 'body2' }: Props) {
   return (
     <Typography
       component={to ? Link : 'span'}
       to={to}
       onClick={onClick}
-      variant="body2"
+      variant={variant}
       sx={{
         display: 'inline',
         color: 'primary.main',

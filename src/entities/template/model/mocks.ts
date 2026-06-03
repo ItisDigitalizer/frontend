@@ -13,7 +13,7 @@ export const templateMock: TemplateWithFields = {
   description:
     '%Тут будет краткое описание шаблона Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation.%',
 
-  url: '/mock/template.png',
+  url: '/mock/template.pdf',
 
   fields: [
     { id: 1, key: '{{key1}}', label: 'Ключ 1' },

@@ -1,20 +1,28 @@
 import { useState } from 'react';
+import type { DragEvent, ChangeEvent } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import type { TemplateField } from '@/entities/templateField';
 import { LinkText } from '@/shared/ui';
+import { KeysExampleModal } from './KeysExampleModal';
+import { validateExcelFile } from '../model/validation';
+import type { GenerateUploadData } from '../model/types';
 
 type Props = {
   fields: TemplateField[];
+  uploadData: GenerateUploadData | null;
+  onChange: (uploadData: GenerateUploadData | null) => void;
+  error?: string | null;
+  clearError: () => void;
 };
 
-export function Upload({ fields }: Props) {
-  void fields;
+export function Upload({ fields, uploadData, onChange, error, clearError }: Props) {
+  const [fileError, setFileError] = useState<string | null>(null);
+  const [isKeysModalOpen, setIsKeysModalOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
   };
@@ -23,20 +31,44 @@ export function Upload({ fields }: Props) {
     setIsDragging(false);
   };
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleDrop = (e: DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
     const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile) setFile(droppedFile);
+
+    if (!droppedFile) return;
+
+    const error = validateExcelFile(droppedFile);
+    if (error) {
+      setFileError(error);
+      return;
+    }
+    setFileError(null);
+    clearError();
+
+    onChange({ file: droppedFile });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selected = e.target.files?.[0];
-    if (selected) setFile(selected);
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+
+    if (!selectedFile) return;
+
+    const error = validateExcelFile(selectedFile);
+    if (error) {
+      setFileError(error);
+      return;
+    }
+    setFileError(null);
+    clearError();
+
+    onChange({ file: selectedFile });
   };
 
   const handleClear = () => {
-    setFile(null);
+    setFileError(null);
+    clearError();
+    onChange(null);
   };
 
   return (
@@ -60,7 +92,7 @@ export function Upload({ fields }: Props) {
           bgcolor: isDragging ? 'soft.dark' : 'soft.main',
         }}
       >
-        {!file && (
+        {!uploadData && (
           <>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
               <Box sx={{ textAlign: 'center' }}>
@@ -78,20 +110,20 @@ export function Upload({ fields }: Props) {
               </Button>
             </Box>
 
-            <Typography variant="body2" color="text.secondary">
-              Поддерживаемые форматы: .xlsx, .xls
+            <Typography variant="body2" align="center" color={fileError || error ? 'error' : 'text.secondary'}>
+              {error || fileError || 'Поддерживаемые форматы: .xlsx, .xls'}
             </Typography>
           </>
         )}
 
-        {file && (
+        {uploadData && (
           <>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
               <CheckCircleOutlineOutlinedIcon sx={{ fontSize: 64, color: 'success.main', opacity: 0.8 }} />
               <Typography component="p" variant="h6">
                 Файл загружен
               </Typography>
-              <Typography color="text.secondary">{file.name}</Typography>
+              <Typography color="text.secondary">{uploadData.file.name}</Typography>
             </Box>
 
             <Box sx={{ display: 'flex', gap: 3 }}>
@@ -106,11 +138,13 @@ export function Upload({ fields }: Props) {
           </>
         )}
       </Box>
-      {/* TODO: Реализовать модалку с примером */}
+
       <Typography variant="body2" align="center">
         Названия столбцов в файле должны соответствовать ключам шаблона.{' '}
-        <LinkText onClick={() => {}}>Посмотреть пример</LinkText>
+        <LinkText onClick={() => setIsKeysModalOpen(true)}>Посмотреть пример</LinkText>
       </Typography>
+
+      <KeysExampleModal open={isKeysModalOpen} onClose={() => setIsKeysModalOpen(false)} fields={fields} />
     </Box>
   );
 }

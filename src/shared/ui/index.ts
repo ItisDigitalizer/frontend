@@ -4,3 +4,4 @@ export { Loader } from './Loader';
 export { ErrorMessage } from './ErrorMessage';
 export { BackButton } from './BackButton';
 export { LinkText } from './LinkText';
+export { DocumentViewer } from './DocumentViewer';

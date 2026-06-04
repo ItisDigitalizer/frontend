@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import type { TemplateWithFields } from '@/entities/template';
+import { DocumentViewer } from '@/shared/ui';
 
 type Props = {
   template: TemplateWithFields;
@@ -7,17 +8,13 @@ type Props = {
 
 export function TemplatePreview({ template }: Props) {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
+    <Box sx={{ width: '100%', maxWidth: 520, display: 'flex', flexDirection: 'column', gap: 2, textAlign: 'center' }}>
       <Typography component="h2" variant="h6">
-        Предпросмотр
+        Просмотр шаблона документа
       </Typography>
-      {/* TODO: заменить на реальный viewer (PDF / iframe) */}
-      <Box
-        component="img"
-        src={template.url}
-        alt={template.name}
-        sx={{ width: '100%', aspectRatio: '210 / 297', boxShadow: 4 }}
-      />
+      <Box sx={{ aspectRatio: '210 / 297', boxShadow: 4 }}>
+        <DocumentViewer src={template.url} title={template.name} />
+      </Box>
     </Box>
   );
 }

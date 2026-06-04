@@ -1,13 +1,16 @@
 import { Box } from '@mui/material';
 import type { TemplateField } from '@/entities/templateField';
-import { customScrollbar } from '@/shared/lib';
+import { customScrollbar, formatTemplateKey } from '@/shared/lib';
 import { FormField } from '@/shared/ui';
+import type { GenerateManualData } from '../model/types';
 
 type Props = {
   fields: TemplateField[];
+  values: GenerateManualData;
+  onChange: (values: GenerateManualData) => void;
 };
 
-export function Manual({ fields }: Props) {
+export function Manual({ fields, values, onChange }: Props) {
   return (
     <Box
       sx={{
@@ -23,10 +26,14 @@ export function Manual({ fields }: Props) {
         ...customScrollbar,
       }}
     >
-      <FormField label="Имя файла" placeholder="Введите имя файла" />
-
       {fields.map((field) => (
-        <FormField key={field.id} label={field.label} placeholder={field.key} />
+        <FormField
+          key={field.id}
+          label={formatTemplateKey(field.key)}
+          placeholder={field.label}
+          value={values[field.key] ?? ''}
+          onChange={(e) => onChange({ ...values, [field.key]: e.target.value })}
+        />
       ))}
     </Box>
   );

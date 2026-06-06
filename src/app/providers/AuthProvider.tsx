@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
-import { AuthContext } from '@/entities/auth';
+import { AuthContext, refresh } from '@/entities/auth';
+import { getMe } from '@/entities/user';
 import type { AuthContextValue, AuthState } from '@/entities/auth';
 import { Loader } from '@/shared/ui';
+import { setAccessToken } from '@/shared/api';
 
 type Props = {
   children: ReactNode;
@@ -16,46 +18,46 @@ export function AuthProvider({ children }: Props) {
   const [isInitialized, setIsInitialized] = useState(false);
   const isAuth = Boolean(auth.accessToken);
 
-  const login = (authState: AuthState) => {
+  const loginToContext = (authState: AuthState) => {
     setAuth(authState);
   };
 
-  const logout = () => {
+  const logoutFromContext = () => {
     setAuth({
       user: null,
       accessToken: null,
     });
   };
 
-  // TODO: заменить на реальный API запрос
   useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
-
     const initializeAuth = async () => {
       try {
-        await new Promise((resolve) => {
-          timeoutId = setTimeout(resolve, 1000);
+        const tokens = await refresh();
+
+        setAccessToken(tokens.access_token);
+
+        const user = await getMe();
+
+        loginToContext({
+          user,
+          accessToken: tokens.access_token,
         });
       } catch {
-        setAuth({
-          user: null,
-          accessToken: null,
-        });
+        setAccessToken(null);
+        logoutFromContext();
       } finally {
         setIsInitialized(true);
       }
     };
 
     void initializeAuth();
-
-    return () => clearTimeout(timeoutId);
   }, []);
 
   const authContextValue: AuthContextValue = {
     ...auth,
     isAuth,
-    login,
-    logout,
+    loginToContext,
+    logoutFromContext,
   };
 
   if (!isInitialized) {

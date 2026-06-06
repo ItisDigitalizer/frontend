@@ -4,36 +4,24 @@ import { Box, Paper, Typography, Button } from '@mui/material';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
+import { getGeneratedDocumentPdfUrl, getGeneratedDocumentDownloadUrl } from '@/entities/generation';
 import { LinkText } from '@/shared/ui';
 import { DocumentPreviewModal } from './DocumentPreviewModal';
 import type { GenerateSuccessState } from '../model/types';
 
 export function GenerateSuccessPage() {
-  const location = useLocation();
-  const generationId = (location.state as GenerateSuccessState | null)?.generationId;
   const [isViewerOpen, setIsViewerOpen] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [downloadError, setDownloadError] = useState<string | null>(null);
+  const location = useLocation();
+  const state = location.state as GenerateSuccessState | null;
+  const generationId = state?.generationId;
+  const templateId = state?.templateId;
 
   if (!generationId) {
     return <Navigate to="/templates" replace />;
   }
 
-  // TODO: заменить на API запрос
-  const handleDownload = async () => {
-    try {
-      setDownloadError(null);
-      setIsDownloading(true);
-
-      console.log(generationId);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } catch (error) {
-      console.error(error);
-      setDownloadError('Ошибка скачивания документа');
-    } finally {
-      setIsDownloading(false);
-    }
-  };
+  const pdfUrl = getGeneratedDocumentPdfUrl(generationId);
+  const downloadUrl = getGeneratedDocumentDownloadUrl(generationId);
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
@@ -68,34 +56,24 @@ export function GenerateSuccessPage() {
           </Button>
 
           <Button
+            component="a"
+            href={downloadUrl}
             variant="contained"
             fullWidth
             startIcon={<DownloadOutlinedIcon />}
-            onClick={handleDownload}
-            disabled={isDownloading}
             sx={{ fontSize: 18 }}
           >
-            {isDownloading ? 'Скачивание...' : 'Скачать'}
+            Скачать
           </Button>
         </Box>
 
-        {downloadError && (
-          <Typography color="error" align="center">
-            {downloadError}
-          </Typography>
-        )}
-
         <Box sx={{ display: 'flex', gap: 3 }}>
           <LinkText to="/templates">Вернуться в каталог</LinkText>
-          <LinkText to="/generate/1">Сгенерировать ещё</LinkText>
+          <LinkText to={`/generate/${templateId}`}>Сгенерировать ещё</LinkText>
         </Box>
       </Paper>
 
-      <DocumentPreviewModal
-        src="/mock/generated_document1.pdf"
-        open={isViewerOpen}
-        onClose={() => setIsViewerOpen(false)}
-      />
+      <DocumentPreviewModal src={pdfUrl} open={isViewerOpen} onClose={() => setIsViewerOpen(false)} />
     </Box>
   );
 }

@@ -4,6 +4,7 @@ import { ProtectedRoute } from '@/app/router/ProtectedRoute';
 import { TemplatesPage } from '@/pages/templatesPage';
 import { LoginPage } from '@/pages/loginPage';
 import { RegisterPage } from '@/pages/registerPage';
+import { RegisterSuccessPage } from '@/pages/registerSuccessPage';
 import { GeneratePage } from '@/pages/generatePage';
 import { GenerateSuccessPage } from '@/pages/generateSuccessPage';
 import { ProfilePage } from '@/pages/profilePage';
@@ -30,6 +31,7 @@ function App() {
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/register/success" element={<RegisterSuccessPage />} />
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />

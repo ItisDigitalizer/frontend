@@ -1,8 +1,8 @@
 import { Box, Button, Paper, Typography } from '@mui/material';
 import { FormField, LinkText, PasswordField } from '@/shared/ui';
-import { useFormValidation, validateEmail } from '@/shared/lib/validation';
+import { useFormValidation } from '@/shared/lib/validation';
 import type { Validators } from '@/shared/lib/validation';
-import { validatePassword } from '../model/validation';
+import { validateUsername, validatePassword } from '../model/validation';
 import type { LoginFormValues } from '../model/types';
 
 type Props = {
@@ -12,18 +12,18 @@ type Props = {
 };
 
 const initialValues: LoginFormValues = {
-  email: '',
+  username: '',
   password: '',
 };
 
 const loginValidators: Validators<LoginFormValues> = {
-  email: validateEmail,
+  username: validateUsername,
   password: validatePassword,
 };
 
 export function LoginForm({ onSubmit, isLoading, error }: Props) {
   const { values, errors, touched, handleChange, handleBlur, validateForm } = useFormValidation({
-    initialValues: initialValues,
+    initialValues,
     validators: loginValidators,
   });
 
@@ -47,14 +47,14 @@ export function LoginForm({ onSubmit, isLoading, error }: Props) {
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           <FormField
-            label="Email"
-            placeholder="Введите email"
-            value={values.email}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email ? errors.email || ' ' : ' '}
+            label="Имя пользователя"
+            placeholder="Введите имя пользователя"
+            value={values.username}
+            error={Boolean(touched.username && errors.username)}
+            helperText={touched.username ? errors.username || ' ' : ' '}
             disabled={isLoading}
-            onChange={(e) => handleChange('email', e.target.value)}
-            onBlur={() => handleBlur('email')}
+            onChange={(e) => handleChange('username', e.target.value)}
+            onBlur={() => handleBlur('username')}
           />
 
           <PasswordField

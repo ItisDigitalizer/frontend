@@ -1,28 +1,35 @@
 import { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import { generationsMock } from '@/entities/generation';
+import { useAuth } from '@/entities/auth';
+import { getGenerations } from '@/entities/generation';
 import type { Generation } from '@/entities/generation';
-import { GenerationList } from './GenerationList.tsx';
 import { Loader, ErrorMessage } from '@/shared/ui';
+import { GenerationList } from './GenerationList.tsx';
 
 export function GenerationHistory() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [generations, setGenerations] = useState<Generation[]>([]);
+  const { user } = useAuth();
 
-  // TODO: заменить на API
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
+    setError(null);
+    setIsLoading(true);
+
+    const loadGenerations = async () => {
+      if (!user?.id) return;
+
       try {
-        setGenerations(generationsMock);
+        const data = await getGenerations(user.id);
+        setGenerations(data);
       } catch {
-        setError('Ошибка загрузки истории');
+        setError('Ошибка загрузки истории генераций');
       } finally {
         setIsLoading(false);
       }
-    }, 1000);
+    };
 
-    return () => clearTimeout(timeoutId);
+    void loadGenerations();
   }, []);
 
   return (
@@ -42,10 +49,9 @@ export function GenerationHistory() {
       ) : (
         <>
           <Box sx={{ px: 2.5, py: 1 }}>
-            <Box sx={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', maxWidth: 900, gap: 3 }}>
+            <Box sx={{ display: 'grid', gridTemplateColumns: '2fr 1fr', maxWidth: 720, gap: 3 }}>
               <Typography>Название шаблона</Typography>
               <Typography>Дата генерации</Typography>
-              <Typography>Документов</Typography>
             </Box>
           </Box>
           <GenerationList generations={generations} />

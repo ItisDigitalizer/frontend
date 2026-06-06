@@ -5,6 +5,52 @@ export type ClientOptions = {
 };
 
 /**
+ * ActionSuccessResponse
+ */
+export type ActionSuccessResponse = {
+    /**
+     * Success
+     */
+    success: boolean;
+    /**
+     * Detail
+     */
+    detail: string;
+};
+
+/**
+ * Body_create_template_api_v1_templates__post
+ */
+export type BodyCreateTemplateApiV1TemplatesPost = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string;
+    /**
+     * Docx File
+     */
+    docx_file: Blob | File;
+};
+
+/**
+ * Body_generate_from_excel_api_v1_generate_from_excel__post
+ */
+export type BodyGenerateFromExcelApiV1GenerateFromExcelPost = {
+    /**
+     * Template Id
+     */
+    template_id: string;
+    /**
+     * Excel File
+     */
+    excel_file: Blob | File;
+};
+
+/**
  * Body_login_api_v1_auth_login_post
  */
 export type BodyLoginApiV1AuthLoginPost = {
@@ -35,9 +81,35 @@ export type BodyLoginApiV1AuthLoginPost = {
 };
 
 /**
- * DocumentTemplateCreate
+ * ChangePasswordRequest
  */
-export type DocumentTemplateCreate = {
+export type ChangePasswordRequest = {
+    /**
+     * Old Password
+     */
+    old_password: string;
+    /**
+     * New Password
+     */
+    new_password: string;
+};
+
+/**
+ * DocumentTemplateFieldRead
+ */
+export type DocumentTemplateFieldRead = {
+    /**
+     * Id
+     */
+    id?: string;
+    /**
+     * Created At
+     */
+    created_at?: string;
+    /**
+     * Updated At
+     */
+    updated_at?: string;
     /**
      * Name
      */
@@ -54,6 +126,10 @@ export type DocumentTemplateCreate = {
      * File Path
      */
     file_path: string;
+    /**
+     * Fields
+     */
+    fields: Array<TemplateField>;
 };
 
 /**
@@ -106,6 +182,44 @@ export type DocumentTemplateUpdate = {
      * File Path
      */
     file_path?: string | null;
+};
+
+/**
+ * EmailNotificationResponse
+ */
+export type EmailNotificationResponse = {
+    /**
+     * Detail
+     */
+    detail: string;
+};
+
+/**
+ * ForgotPasswordRequest
+ */
+export type ForgotPasswordRequest = {
+    /**
+     * Email
+     */
+    email: string;
+};
+
+/**
+ * GenerateResponse
+ */
+export type GenerateResponse = {
+    /**
+     * Process Id
+     */
+    process_id: string;
+    /**
+     * Download
+     */
+    download: string;
+    /**
+     * Files
+     */
+    files: number;
 };
 
 /**
@@ -165,7 +279,7 @@ export type GenerationProcessCreate = {
     /**
      * User Id
      */
-    user_id: string;
+    user_id: string | null;
     /**
      * Template Id
      */
@@ -191,11 +305,12 @@ export type GenerationProcessRead = {
     /**
      * User Id
      */
-    user_id: string;
+    user_id: string | null;
     /**
      * Template Id
      */
     template_id: string;
+    template?: DocumentTemplateRead | null;
 };
 
 /**
@@ -234,6 +349,62 @@ export type LogoutResponse = {
      * Message
      */
     message?: string | null;
+};
+
+/**
+ * ManualDataRequest
+ */
+export type ManualDataRequest = {
+    /**
+     * Data
+     */
+    data: {
+        [key: string]: unknown;
+    };
+};
+
+/**
+ * ResetPasswordRequest
+ */
+export type ResetPasswordRequest = {
+    /**
+     * Token
+     */
+    token: string;
+    /**
+     * New Password
+     */
+    new_password: string;
+};
+
+/**
+ * TemplateField
+ */
+export type TemplateField = {
+    /**
+     * Template Id
+     */
+    template_id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description: string;
+    /**
+     * Id
+     */
+    id?: string;
+    /**
+     * Created At
+     */
+    created_at?: string;
+    /**
+     * Updated At
+     */
+    updated_at?: string;
 };
 
 /**
@@ -422,6 +593,10 @@ export type GetUsersApiV1UsersGetData = {
          * Limit
          */
         limit?: number;
+        /**
+         * Id
+         */
+        id?: string | null;
         /**
          * Username
          */
@@ -634,8 +809,115 @@ export type RegisterApiV1AuthRegisterPostResponses = {
     /**
      * Successful Response
      */
-    200: unknown;
+    200: EmailNotificationResponse;
 };
+
+export type RegisterApiV1AuthRegisterPostResponse = RegisterApiV1AuthRegisterPostResponses[keyof RegisterApiV1AuthRegisterPostResponses];
+
+export type VerifyAccountApiV1AuthVerifyAccountGetData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Token
+         */
+        token: string;
+    };
+    url: '/api/v1/auth/verify-account';
+};
+
+export type VerifyAccountApiV1AuthVerifyAccountGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type VerifyAccountApiV1AuthVerifyAccountGetError = VerifyAccountApiV1AuthVerifyAccountGetErrors[keyof VerifyAccountApiV1AuthVerifyAccountGetErrors];
+
+export type VerifyAccountApiV1AuthVerifyAccountGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: ActionSuccessResponse;
+};
+
+export type VerifyAccountApiV1AuthVerifyAccountGetResponse = VerifyAccountApiV1AuthVerifyAccountGetResponses[keyof VerifyAccountApiV1AuthVerifyAccountGetResponses];
+
+export type ForgotPasswordApiV1AuthForgotPasswordPostData = {
+    body: ForgotPasswordRequest;
+    path?: never;
+    query?: never;
+    url: '/api/v1/auth/forgot-password';
+};
+
+export type ForgotPasswordApiV1AuthForgotPasswordPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ForgotPasswordApiV1AuthForgotPasswordPostError = ForgotPasswordApiV1AuthForgotPasswordPostErrors[keyof ForgotPasswordApiV1AuthForgotPasswordPostErrors];
+
+export type ForgotPasswordApiV1AuthForgotPasswordPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: EmailNotificationResponse;
+};
+
+export type ForgotPasswordApiV1AuthForgotPasswordPostResponse = ForgotPasswordApiV1AuthForgotPasswordPostResponses[keyof ForgotPasswordApiV1AuthForgotPasswordPostResponses];
+
+export type ResetPasswordApiV1AuthResetPasswordPostData = {
+    body: ResetPasswordRequest;
+    path?: never;
+    query?: never;
+    url: '/api/v1/auth/reset-password';
+};
+
+export type ResetPasswordApiV1AuthResetPasswordPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ResetPasswordApiV1AuthResetPasswordPostError = ResetPasswordApiV1AuthResetPasswordPostErrors[keyof ResetPasswordApiV1AuthResetPasswordPostErrors];
+
+export type ResetPasswordApiV1AuthResetPasswordPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: ActionSuccessResponse;
+};
+
+export type ResetPasswordApiV1AuthResetPasswordPostResponse = ResetPasswordApiV1AuthResetPasswordPostResponses[keyof ResetPasswordApiV1AuthResetPasswordPostResponses];
+
+export type ChangePasswordApiV1AuthChangePasswordPostData = {
+    body: ChangePasswordRequest;
+    path?: never;
+    query?: never;
+    url: '/api/v1/auth/change-password';
+};
+
+export type ChangePasswordApiV1AuthChangePasswordPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ChangePasswordApiV1AuthChangePasswordPostError = ChangePasswordApiV1AuthChangePasswordPostErrors[keyof ChangePasswordApiV1AuthChangePasswordPostErrors];
+
+export type ChangePasswordApiV1AuthChangePasswordPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: ActionSuccessResponse;
+};
+
+export type ChangePasswordApiV1AuthChangePasswordPostResponse = ChangePasswordApiV1AuthChangePasswordPostResponses[keyof ChangePasswordApiV1AuthChangePasswordPostResponses];
 
 export type RefreshApiV1AuthRefreshPostData = {
     body?: never;
@@ -751,6 +1033,34 @@ export type CreateDocumentApiV1DocumentsPostResponses = {
 };
 
 export type CreateDocumentApiV1DocumentsPostResponse = CreateDocumentApiV1DocumentsPostResponses[keyof CreateDocumentApiV1DocumentsPostResponses];
+
+export type GetPdfDocumentApiV1DocumentsPdfGetData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Gen Process Id
+         */
+        gen_process_id?: string | null;
+    };
+    url: '/api/v1/documents/pdf';
+};
+
+export type GetPdfDocumentApiV1DocumentsPdfGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetPdfDocumentApiV1DocumentsPdfGetError = GetPdfDocumentApiV1DocumentsPdfGetErrors[keyof GetPdfDocumentApiV1DocumentsPdfGetErrors];
+
+export type GetPdfDocumentApiV1DocumentsPdfGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
 
 export type DeleteDocumentApiV1DocumentsDocumentIdDeleteData = {
     body?: never;
@@ -1076,7 +1386,7 @@ export type GetTemplatesApiV1TemplatesGetResponses = {
 export type GetTemplatesApiV1TemplatesGetResponse = GetTemplatesApiV1TemplatesGetResponses[keyof GetTemplatesApiV1TemplatesGetResponses];
 
 export type CreateTemplateApiV1TemplatesPostData = {
-    body: DocumentTemplateCreate;
+    body: BodyCreateTemplateApiV1TemplatesPost;
     path?: never;
     query?: never;
     url: '/api/v1/templates/';
@@ -1155,7 +1465,7 @@ export type GetTemplateApiV1TemplatesTemplateIdGetResponses = {
     /**
      * Successful Response
      */
-    200: DocumentTemplateRead;
+    200: DocumentTemplateFieldRead;
 };
 
 export type GetTemplateApiV1TemplatesTemplateIdGetResponse = GetTemplateApiV1TemplatesTemplateIdGetResponses[keyof GetTemplateApiV1TemplatesTemplateIdGetResponses];
@@ -1189,6 +1499,34 @@ export type UpdateTemplateApiV1TemplatesTemplateIdPatchResponses = {
 };
 
 export type UpdateTemplateApiV1TemplatesTemplateIdPatchResponse = UpdateTemplateApiV1TemplatesTemplateIdPatchResponses[keyof UpdateTemplateApiV1TemplatesTemplateIdPatchResponses];
+
+export type GetPdfTemplateApiV1TemplatesPdfTemplateIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * Template Id
+         */
+        template_id: string;
+    };
+    query?: never;
+    url: '/api/v1/templates/pdf/{template_id}';
+};
+
+export type GetPdfTemplateApiV1TemplatesPdfTemplateIdGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetPdfTemplateApiV1TemplatesPdfTemplateIdGetError = GetPdfTemplateApiV1TemplatesPdfTemplateIdGetErrors[keyof GetPdfTemplateApiV1TemplatesPdfTemplateIdGetErrors];
+
+export type GetPdfTemplateApiV1TemplatesPdfTemplateIdGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
 
 export type GetFieldsApiV1FieldsGetData = {
     body?: never;
@@ -1344,3 +1682,86 @@ export type UpdateFieldApiV1FieldsFieldIdPatchResponses = {
 };
 
 export type UpdateFieldApiV1FieldsFieldIdPatchResponse = UpdateFieldApiV1FieldsFieldIdPatchResponses[keyof UpdateFieldApiV1FieldsFieldIdPatchResponses];
+
+export type GenerateFromExcelApiV1GenerateFromExcelPostData = {
+    body: BodyGenerateFromExcelApiV1GenerateFromExcelPost;
+    path?: never;
+    query?: never;
+    url: '/api/v1/generate/from-excel/';
+};
+
+export type GenerateFromExcelApiV1GenerateFromExcelPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GenerateFromExcelApiV1GenerateFromExcelPostError = GenerateFromExcelApiV1GenerateFromExcelPostErrors[keyof GenerateFromExcelApiV1GenerateFromExcelPostErrors];
+
+export type GenerateFromExcelApiV1GenerateFromExcelPostResponses = {
+    /**
+     * Successful Response
+     */
+    201: GenerateResponse;
+};
+
+export type GenerateFromExcelApiV1GenerateFromExcelPostResponse = GenerateFromExcelApiV1GenerateFromExcelPostResponses[keyof GenerateFromExcelApiV1GenerateFromExcelPostResponses];
+
+export type GenerateManualApiV1GenerateManualPostData = {
+    body: ManualDataRequest;
+    path?: never;
+    query: {
+        /**
+         * Template Id
+         */
+        template_id: string;
+    };
+    url: '/api/v1/generate/manual/';
+};
+
+export type GenerateManualApiV1GenerateManualPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GenerateManualApiV1GenerateManualPostError = GenerateManualApiV1GenerateManualPostErrors[keyof GenerateManualApiV1GenerateManualPostErrors];
+
+export type GenerateManualApiV1GenerateManualPostResponses = {
+    /**
+     * Successful Response
+     */
+    201: GenerateResponse;
+};
+
+export type GenerateManualApiV1GenerateManualPostResponse = GenerateManualApiV1GenerateManualPostResponses[keyof GenerateManualApiV1GenerateManualPostResponses];
+
+export type DownloadResultApiV1GenerateDownloadProcessIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * Process Id
+         */
+        process_id: string;
+    };
+    query?: never;
+    url: '/api/v1/generate/download/{process_id}/';
+};
+
+export type DownloadResultApiV1GenerateDownloadProcessIdGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DownloadResultApiV1GenerateDownloadProcessIdGetError = DownloadResultApiV1GenerateDownloadProcessIdGetErrors[keyof DownloadResultApiV1GenerateDownloadProcessIdGetErrors];
+
+export type DownloadResultApiV1GenerateDownloadProcessIdGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};

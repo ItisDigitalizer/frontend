@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import { templatesMock } from '@/entities/template';
+import { getTemplates } from '@/entities/template';
 import type { Template } from '@/entities/template';
 import { ErrorMessage, Loader } from '@/shared/ui';
 import { TemplatesSearch } from './TemplatesSearch';
@@ -11,19 +11,19 @@ export function TemplatesPage() {
   const [error, setError] = useState<string | null>(null);
   const [templates, setTemplates] = useState<Template[]>([]);
 
-  // TODO: заменить mock-данные на API запрос
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
+    const loadTemplates = async () => {
       try {
-        setTemplates(templatesMock);
+        const templates = await getTemplates();
+        setTemplates(templates);
       } catch {
         setError('Ошибка загрузки шаблонов');
       } finally {
         setIsLoading(false);
       }
-    }, 1000);
+    };
 
-    return () => clearTimeout(timeoutId);
+    void loadTemplates();
   }, []);
 
   return (

@@ -7,6 +7,6 @@ export type AuthState = {
 
 export type AuthContextValue = AuthState & {
   isAuth: boolean;
-  login: (authState: AuthState) => void;
-  logout: () => void;
+  loginToContext: (authState: AuthState) => void;
+  logoutFromContext: () => void;
 };

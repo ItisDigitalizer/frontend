@@ -1,13 +1,19 @@
 import { Box, Paper, Typography } from '@mui/material';
+import { getGeneratedDocumentDownloadUrl } from '@/entities/generation';
 import type { Generation } from '@/entities/generation';
-import { pluralize } from '@/shared/lib';
 import { LinkText } from '@/shared/ui';
+import { formatDate } from '@/shared/lib';
 
 type Props = {
   generation: Generation;
 };
 
 export function GenerationCard({ generation }: Props) {
+  const handleDownload = () => {
+    const url = getGeneratedDocumentDownloadUrl(generation.id);
+    window.location.assign(url);
+  };
+
   return (
     <Paper
       elevation={0}
@@ -24,19 +30,17 @@ export function GenerationCard({ generation }: Props) {
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: '2fr 1fr 1fr',
+          gridTemplateColumns: '2fr 1fr',
           gap: 3,
-          maxWidth: 900,
+          maxWidth: 720,
           width: '100%',
         }}
       >
         <Typography noWrap>{generation.templateName}</Typography>
-        <Typography noWrap>{new Date(generation.createdAt).toLocaleDateString()}</Typography>
-        <Typography noWrap>{pluralize(generation.filesCount, 'документ', 'документа', 'документов')}</Typography>
+        <Typography noWrap>{formatDate(generation.createdAt)}</Typography>
       </Box>
 
-      {/* Реализовать скачивание файла */}
-      <LinkText onClick={() => {}}>Скачать</LinkText>
+      <LinkText onClick={handleDownload}>Скачать</LinkText>
     </Paper>
   );
 }

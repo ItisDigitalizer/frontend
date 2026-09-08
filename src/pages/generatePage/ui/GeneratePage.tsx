@@ -4,7 +4,8 @@ import { Box, Typography } from '@mui/material';
 import { GenerateForm, GenerateOverlay } from '@/features/generate';
 import type { GenerateSubmitData } from '@/features/generate';
 import { useAuth } from '@/entities/auth';
-import { templateMock } from '@/entities/template';
+import { getTemplate } from '@/entities/template';
+import { generateManual, generateFromExcel } from '@/entities/generation';
 import type { TemplateWithFields } from '@/entities/template';
 import { ErrorMessage, Loader, LinkText } from '@/shared/ui';
 import { TemplateInfo } from './TemplateInfo';
@@ -19,45 +20,52 @@ export function GeneratePage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { isAuth } = useAuth();
-  void id;
 
-  // TODO: заменить на реальный API вызов генерации
   const handleGenerate = async (data: GenerateSubmitData) => {
+    if (!template) {
+      return;
+    }
+
     try {
       setGenerateError(null);
       setIsGenerating(true);
 
-      console.log(data);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      let result;
 
-      const isSuccess = Math.random() > 0.5;
-      if (isSuccess) {
-        navigate('/generate/success', { state: { generationId: '123' } });
-        return;
+      if (data.mode === 'manual') {
+        result = await generateManual(template.id, data.data);
+      } else {
+        result = await generateFromExcel(template.id, data.data.file);
       }
-      setGenerateError('Ошибка генерации документа');
-    } catch (error) {
-      console.error(error);
+
+      navigate('/generate/success', { state: { generationId: result.process_id, templateId: template.id } });
+    } catch {
       setGenerateError('Ошибка генерации документа');
     } finally {
       setIsGenerating(false);
     }
   };
 
-  // TODO: заменить mock-данные на API запрос по id
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
+    if (!id) {
+      setError('Ошибка загрузки шаблона');
+      setIsLoading(false);
+      return;
+    }
+
+    const loadTemplate = async () => {
       try {
-        setTemplate(templateMock);
+        const template = await getTemplate(id);
+        setTemplate(template);
       } catch {
         setError('Ошибка загрузки шаблона');
       } finally {
         setIsLoading(false);
       }
-    }, 1000);
+    };
 
-    return () => clearTimeout(timeoutId);
-  }, []);
+    void loadTemplate();
+  }, [id]);
 
   if (isLoading) {
     return <Loader message="Загрузка шаблона..." />;
@@ -82,7 +90,7 @@ export function GeneratePage() {
             </Typography>
           )}
         </Box>
-        <TemplatePreview template={template} />
+        <TemplatePreview templateId={template.id} />
       </Box>
       {isGenerating && <GenerateOverlay />}
     </>

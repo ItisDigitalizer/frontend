@@ -1,5 +1,5 @@
 export type TemplateField = {
-  id: number;
+  id: string;
   key: string;
   label: string;
 };

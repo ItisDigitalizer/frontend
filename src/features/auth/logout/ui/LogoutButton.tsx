@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
-import { useAuth } from '@/entities/auth';
+import { useAuth, logout as logoutApi } from '@/entities/auth';
+import { setAccessToken } from '@/shared/api';
 
 export function LogoutButton() {
   const [isLoading, setIsLoading] = useState(false);
@@ -12,11 +13,11 @@ export function LogoutButton() {
   const handleLogout = async () => {
     try {
       setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } catch (error) {
-      console.error(error);
+      await logoutApi();
     } finally {
+      setAccessToken(null);
       logout();
+
       navigate('/templates', { replace: true });
       setIsLoading(false);
     }

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LoginForm } from '@/features/auth/login';
 import type { LoginFormValues } from '@/features/auth/login';
-import { useAuth, login } from '@/entities/auth';
+import { useAuth, login as loginApi } from '@/entities/auth';
 import { getMe } from '@/entities/user';
 import { setAccessToken } from '@/shared/api';
 
@@ -12,14 +12,14 @@ export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/profile';
-  const { loginToContext } = useAuth();
+  const { login } = useAuth();
 
   const handleLogin = async ({ username, password }: LoginFormValues) => {
     try {
       setError(null);
       setIsLoading(true);
 
-      const tokens = await login({
+      const tokens = await loginApi({
         username,
         password,
       });
@@ -28,7 +28,7 @@ export function LoginPage() {
 
       const user = await getMe();
 
-      loginToContext({
+      login({
         user,
         accessToken: tokens.access_token,
       });

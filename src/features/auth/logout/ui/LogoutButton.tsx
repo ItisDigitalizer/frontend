@@ -2,21 +2,21 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
-import { useAuth, logout } from '@/entities/auth';
+import { useAuth, logout as logoutApi } from '@/entities/auth';
 import { setAccessToken } from '@/shared/api';
 
 export function LogoutButton() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { logoutFromContext } = useAuth();
+  const { logout } = useAuth();
 
   const handleLogout = async () => {
     try {
       setIsLoading(true);
-      await logout();
+      await logoutApi();
     } finally {
       setAccessToken(null);
-      logoutFromContext();
+      logout();
 
       navigate('/templates', { replace: true });
       setIsLoading(false);

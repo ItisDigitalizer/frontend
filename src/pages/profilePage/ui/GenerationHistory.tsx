@@ -30,7 +30,7 @@ export function GenerationHistory() {
     };
 
     void loadGenerations();
-  }, []);
+  }, [user?.id]);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>

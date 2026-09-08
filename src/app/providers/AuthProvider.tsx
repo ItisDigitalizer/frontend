@@ -18,11 +18,11 @@ export function AuthProvider({ children }: Props) {
   const [isInitialized, setIsInitialized] = useState(false);
   const isAuth = Boolean(auth.accessToken);
 
-  const loginToContext = (authState: AuthState) => {
+  const login = (authState: AuthState) => {
     setAuth(authState);
   };
 
-  const logoutFromContext = () => {
+  const logout = () => {
     setAuth({
       user: null,
       accessToken: null,
@@ -38,13 +38,13 @@ export function AuthProvider({ children }: Props) {
 
         const user = await getMe();
 
-        loginToContext({
+        login({
           user,
           accessToken: tokens.access_token,
         });
       } catch {
         setAccessToken(null);
-        logoutFromContext();
+        logout();
       } finally {
         setIsInitialized(true);
       }
@@ -56,8 +56,8 @@ export function AuthProvider({ children }: Props) {
   const authContextValue: AuthContextValue = {
     ...auth,
     isAuth,
-    loginToContext,
-    logoutFromContext,
+    login,
+    logout,
   };
 
   if (!isInitialized) {
